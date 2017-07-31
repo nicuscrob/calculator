@@ -32,7 +32,7 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CalculatorApiIT {
+public class ComputationControllerIT {
 
     @LocalServerPort
     private int port;

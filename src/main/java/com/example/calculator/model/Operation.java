@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 @ToString
 public class Operation implements Serializable{
 
+    private long id;
+
     private BigDecimal left;
 
     private BigDecimal right;

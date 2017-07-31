@@ -4,11 +4,12 @@ import com.example.calculator.model.Operation;
 import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 
-@Component
+@Service
 public class ComputationService {
 
     @Autowired

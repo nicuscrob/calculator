@@ -3,12 +3,6 @@ var stompClient = null;
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
     $("#greetings").html("");
 }
 
@@ -21,9 +15,9 @@ function connect() {
         stompClient.subscribe('/topic/results', function (greeting) {
             var body = JSON.parse(greeting.body);
             if (body.success) {
-                showResults(body.value);
+                showResults(body.id, body.value);
             } else {
-                showResults("Error: " + body.errorMessage)
+                showResults(body.id, "Error: " + body.errorMessage)
             }
         });
     });
@@ -38,15 +32,46 @@ function disconnect() {
 }
 
 function sendAdd() {
+    var operationId = Date.now();
     stompClient.send("/app/compute", {}, JSON.stringify({'left': $("#left").val(),
         'right': $("#right").val(),
         'operand': 'ADD',
-        'sleep': $("#sleep").val()
+        'sleep': $("#sleep").val(),
+        'id': operationId
     }));
+    $("#results").append("<tr><td>" + $("#left").val() + " + " + $("#right").val() +
+        "<span id="+ operationId +"/>" +
+        "</td><td><button onclick=\"requestResult(\'"+ operationId+ "\')\">Request Result</button>" +
+        "</td></tr>");
+
 }
 
-function showResults(message) {
-    $("#results").append("<tr><td>" + message + "</td></tr>");
+function requestResult(id) {
+    $.ajax({
+        type: "GET",
+        url: "result/"+id,
+        success: function(result) {
+            if (result) {
+                if (result.success) {
+                    $("#" + result.id).append(" = " + result.value);
+                }
+            }
+        },
+        error: function(result) {
+        }
+    });
+}
+
+function showResults(id, message) {
+    $("#"+id).append(" = " +message);
+    $.ajax({
+        type: "POST",
+        url: "result/ack/"+id,
+        success: function(result) {
+        },
+        error: function(result) {
+        }
+    });
 }
 
 $(function () {

@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 @Getter
 public class OperationResult {
 
+    private long id;
+
     private BigDecimal value;
 
     private boolean success;

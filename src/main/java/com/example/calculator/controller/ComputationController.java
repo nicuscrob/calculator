@@ -4,12 +4,11 @@ import com.example.calculator.model.Operation;
 import com.example.calculator.model.OperationResult;
 import com.example.calculator.model.OperationResult.OperationResultBuilder;
 import com.example.calculator.service.ComputationService;
+import com.example.calculator.service.ResultsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -17,16 +16,20 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
-@RequestMapping("/calculator")
-public class CalculatorAPI {
+public class ComputationController {
 
     @Autowired
     private ComputationService computationService;
 
+    @Autowired
+    private ResultsService resultsService;
+
     @MessageMapping("/compute")
     @SendTo("/topic/results")
+
     public OperationResult compute(Operation operation) {
-        final OperationResultBuilder resultBuilder = OperationResult.builder();
+        final OperationResultBuilder resultBuilder = OperationResult.builder()
+                .id(operation.getId());
         try {
             resultBuilder.value(computationService.compute(operation))
                 .success(true);
@@ -37,12 +40,9 @@ public class CalculatorAPI {
         }
 
         sleepFor(operation.getSleep());
-        return resultBuilder.build();
-    }
-
-    @RequestMapping(value = "/results", method = RequestMethod.GET)
-    public OperationResult fetch(){
-        return OperationResult.builder().build();
+        final OperationResult result = resultBuilder.build();
+        resultsService.save(result);
+        return result;
     }
 
     private void sleepFor(int seconds) {
