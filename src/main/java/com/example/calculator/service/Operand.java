@@ -2,6 +2,9 @@ package com.example.calculator.service;
 
 import java.math.BigDecimal;
 
+/**
+ * Supported operations enumeration
+ */
 public enum Operand implements ComputeAware {
 
     ADD {

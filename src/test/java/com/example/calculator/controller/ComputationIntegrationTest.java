@@ -114,7 +114,7 @@ public class ComputationIntegrationTest {
                 createURLWithPort("/result/" + ID),
                 HttpMethod.GET, entity, String.class);
 
-        assertEquals(retrieveResult.getStatusCode(), HttpStatus.OK);
+        assertEquals(retrieveResult.getStatusCode(), HttpStatus.NOT_FOUND);
         assertNull(retrieveResult.getBody());
     }
 
@@ -140,7 +140,7 @@ public class ComputationIntegrationTest {
                 createURLWithPort("/result/" + ID),
                 HttpMethod.GET, entity, String.class);
 
-        assertEquals(HttpStatus.OK, retrieveResult.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, retrieveResult.getStatusCode());
         assertNull(retrieveResult.getBody());
     }
 

@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import static java.util.Optional.ofNullable;
 import static org.springframework.util.Assert.notNull;
 
+/**
+ * Class responsible for validating an operation
+ */
 @Component
 public class OperationValidator {
 

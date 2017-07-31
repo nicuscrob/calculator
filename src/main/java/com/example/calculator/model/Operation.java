@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @ToString
-public class Operation implements Serializable{
+public class Operation implements Serializable {
 
     private long id;
 

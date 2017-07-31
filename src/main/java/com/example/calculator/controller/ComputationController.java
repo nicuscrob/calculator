@@ -27,7 +27,6 @@ public class ComputationController {
 
     @MessageMapping("/compute")
     @SendTo("/topic/results")
-
     public OperationResult compute(Operation operation) {
         final OperationResultBuilder resultBuilder = OperationResult.builder()
                 .id(operation.getId());
