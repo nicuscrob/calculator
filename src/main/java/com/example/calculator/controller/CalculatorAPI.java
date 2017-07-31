@@ -8,12 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Controller
+@RestController
+@RequestMapping("/calculator")
 public class CalculatorAPI {
 
     @Autowired
@@ -23,7 +27,6 @@ public class CalculatorAPI {
     @SendTo("/topic/results")
     public OperationResult compute(Operation operation) {
         final OperationResultBuilder resultBuilder = OperationResult.builder();
-
         try {
             resultBuilder.value(computationService.compute(operation))
                 .success(true);
@@ -35,6 +38,11 @@ public class CalculatorAPI {
 
         sleepFor(operation.getSleep());
         return resultBuilder.build();
+    }
+
+    @RequestMapping(value = "/results", method = RequestMethod.GET)
+    public OperationResult fetch(){
+        return OperationResult.builder().build();
     }
 
     private void sleepFor(int seconds) {
