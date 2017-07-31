@@ -1,9 +1,9 @@
-##Calculator assignment
-###Scope
+## Calculator assignment
+### Scope
 
 Develop a calculator webapplication using websockets.
 
-###Application
+### Application
 
 Websocket for computing operations;
 
@@ -18,7 +18,7 @@ Simple UI for demo
 5. Swagger API *http://localhost:8080/swagger-ui.html*
 6. HealthCheck *http://localhost:8080/health*
 
-###At Most Once Delivery
+### At Most Once Delivery
 
 Given the request to deliver the message at most once, the problem appears when the server publishes a message 
 and no one is listening on the topic. The default brocker used didn't permit ACK headers, for that we could use another 
