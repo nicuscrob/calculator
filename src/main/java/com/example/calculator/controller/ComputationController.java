@@ -6,6 +6,7 @@ import com.example.calculator.model.OperationResult.OperationResultBuilder;
 import com.example.calculator.service.ComputationService;
 import com.example.calculator.service.ResultsService;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -51,5 +52,15 @@ public class ComputationController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @VisibleForTesting
+    void setComputationService(ComputationService computationService) {
+        this.computationService = computationService;
+    }
+
+    @VisibleForTesting
+    void setResultsService(ResultsService resultsService) {
+        this.resultsService = resultsService;
     }
 }

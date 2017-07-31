@@ -2,6 +2,7 @@ package com.example.calculator.service;
 
 import com.example.calculator.model.OperationResult;
 import com.google.common.cache.Cache;
+import org.assertj.core.util.VisibleForTesting;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,4 +34,8 @@ public class ResultsService {
         cache.put(result.getId(), result);
     }
 
+    @VisibleForTesting
+    void setCache(Cache<Long, OperationResult> cache) {
+        this.cache = cache;
+    }
 }
