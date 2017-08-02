@@ -51,7 +51,7 @@ public class ResultsController {
             @ApiResponse(code = 404, message = "No entities found for the given id")
     })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<OperationResult> get(@PathVariable("id") Long id) {
+    public ResponseEntity<OperationResult> get(@PathVariable("id") String id) {
 
         return ofNullable(resultsService.get(id))
                 .map((r) -> ResponseEntity.ok().body(r))
@@ -66,7 +66,7 @@ public class ResultsController {
             @ApiResponse(code = 200, message = "Successful response"),
     })
     @RequestMapping(value = "/ack/{id}", method = RequestMethod.POST)
-    public void ack(@PathVariable("id") long id) {
+    public void ack(@PathVariable("id") String id) {
 
         resultsService.ack(id);
     }

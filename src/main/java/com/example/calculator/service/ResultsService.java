@@ -15,7 +15,7 @@ import java.util.Collection;
 public class ResultsService {
 
     @Resource(name = "resultsCache")
-    private Cache<Long, OperationResult> cache;
+    private Cache<String, OperationResult> cache;
 
     /**
      * Lists all cached results and invalidates cache
@@ -31,7 +31,7 @@ public class ResultsService {
      * Retrieve a result from cache by id, and invalidate cache
      * @return Operation result from cache
      */
-    public OperationResult get(Long id) {
+    public OperationResult get(String id) {
         final OperationResult result = cache.getIfPresent(id);
         cache.invalidate(id);
         return result;
@@ -41,7 +41,7 @@ public class ResultsService {
      * Acknowledgement of an operation id, it removes the result from cache
      * @param id for which to acknowledge
      */
-    public void ack(Long id) {
+    public void ack(String id) {
         cache.invalidate(id);
     }
 
@@ -54,7 +54,7 @@ public class ResultsService {
     }
 
     @VisibleForTesting
-    void setCache(Cache<Long, OperationResult> cache) {
+    void setCache(Cache<String, OperationResult> cache) {
         this.cache = cache;
     }
 }

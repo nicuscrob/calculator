@@ -18,7 +18,7 @@ public class CacheConfig {
      * Defines the cached used to store the operation results.
      */
     @Bean
-    public Cache<Long, OperationResult> resultsCache() {
+    public Cache<String, OperationResult> resultsCache() {
         return CacheBuilder.newBuilder()
                 .maximumSize(2000)
                 .expireAfterWrite(10, TimeUnit.MINUTES)

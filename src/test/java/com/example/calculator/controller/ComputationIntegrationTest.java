@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.calculator.model.Operation;
+import com.example.calculator.model.OperationCreateDto;
 import com.example.calculator.model.OperationResult;
 import com.example.calculator.service.Operand;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,13 +45,15 @@ public class ComputationIntegrationTest {
     private TestRestTemplate restTemplate = new TestRestTemplate();
     private HttpHeaders headers = new HttpHeaders();
 
-    private final static Long ID = 1L;
+    private final static String ID = "id";
 
     @Before
     public void setup() {
         List<Transport> transports = new ArrayList<>();
         transports.add(new WebSocketTransport(new StandardWebSocketClient()));
         SockJsClient sockJsClient = new SockJsClient(transports);
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         this.stompClient = new WebSocketStompClient(sockJsClient);
         this.stompClient.setMessageConverter(new MappingJackson2MessageConverter());
@@ -144,6 +148,50 @@ public class ComputationIntegrationTest {
         assertNull(retrieveResult.getBody());
     }
 
+    @Test
+    public void shouldAddOperationToCompute() throws Exception {
+
+        HttpEntity<String> entity = new HttpEntity<>(getOperationCreateJson(), headers);
+
+        ResponseEntity<String> addOperation = restTemplate.exchange(
+                createURLWithPort("/compute/"),
+                HttpMethod.POST, entity, String.class);
+
+        assertEquals(HttpStatus.OK, addOperation.getStatusCode());
+
+    }
+
+    @Test
+    public void shouldComputeTheAddedOperationOnlyAfterDurationHasPassed() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<>(getOperationCreateJson(), headers);
+
+        ResponseEntity<String> addOperation = restTemplate.exchange(
+                createURLWithPort("/compute/"),
+                HttpMethod.POST, entity, String.class);
+
+        assertEquals(HttpStatus.OK, addOperation.getStatusCode());
+        JSONObject responseJson = new JSONObject(addOperation.getBody());
+        final String opId = responseJson.getString("id");
+        //should fail since it hasn't finish executing
+        ResponseEntity<String> retrieveResult =  getResult(opId);
+        assertEquals(HttpStatus.NOT_FOUND, retrieveResult.getStatusCode());
+        Thread.sleep(1100);
+
+        retrieveResult = getResult(opId);
+        assertEquals(HttpStatus.OK, retrieveResult.getStatusCode());
+        JSONObject resultJson = new JSONObject(retrieveResult.getBody());
+        assertEquals(3, resultJson.getLong("value"));
+
+
+    }
+
+    private ResponseEntity<String> getResult(String id) {
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        return restTemplate.exchange(
+                createURLWithPort("/result/" + id),
+                HttpMethod.GET, entity, String.class);
+    }
+
     private Operation getDefaultOperation() {
         return Operation.builder()
                 .left(BigDecimal.ONE)
@@ -154,8 +202,12 @@ public class ComputationIntegrationTest {
                 .build();
     }
 
+    private String getOperationCreateJson() {
+        return "{\"left\":1,\"right\":2,\"sleep\":1,\"operand\":\"ADD\"}";
+    }
+
     private String getDefaultOperationJson() {
-        return "{\"id\":1,\"value\":2,\"success\":true,\"errorMessage\":null}";
+        return "{\"id\":\"id\",\"value\":2,\"success\":true,\"errorMessage\":null}";
     }
 
     private String createURLWithPort(String uri) {

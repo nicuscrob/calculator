@@ -24,7 +24,7 @@ public class ResultsControllerTest {
     @InjectMocks
     private ResultsController victim;
 
-    private static final Long ID = 1L;
+    private static final String ID = "id";
 
 
     @BeforeMethod

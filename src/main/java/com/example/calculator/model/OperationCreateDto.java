@@ -1,7 +1,6 @@
 package com.example.calculator.model;
 
 import com.example.calculator.service.Operand;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,9 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @ToString
-public class Operation implements Serializable {
-
-    private String id;
+public class OperationCreateDto implements Serializable{
 
     private BigDecimal left;
 
@@ -23,5 +20,4 @@ public class Operation implements Serializable {
     private Operand operand;
 
     private int sleep;
-
 }

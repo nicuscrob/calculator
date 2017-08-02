@@ -17,11 +17,11 @@ import static org.testng.AssertJUnit.assertEquals;
 public class ResultsServiceTest {
 
     @Mock
-    private Cache<Long, OperationResult> cache;
+    private Cache<String, OperationResult> cache;
     @InjectMocks
     private ResultsService victim;
 
-    private final Long ID = 1l;
+    private final String ID = "id";
 
     @BeforeMethod
     public void init() {

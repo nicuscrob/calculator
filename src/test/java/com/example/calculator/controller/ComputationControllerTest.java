@@ -40,7 +40,7 @@ public class ComputationControllerTest {
     @Test
     public void compute_Operation_ShoudComputeAndSave() {
         //given
-        final Operation operation = Operation.builder().id(1L).build();
+        final Operation operation = Operation.builder().id("ID").build();
         ArgumentCaptor<OperationResult> resultCaptor = ArgumentCaptor.forClass(OperationResult.class);
         doNothing().when(resultsService).save(resultCaptor.capture());
         when(computationService.compute(operation)).thenReturn(BigDecimal.ONE);
@@ -57,7 +57,7 @@ public class ComputationControllerTest {
     @Test
     public void compute_InvalidOperation_ShoudReturnFalse() {
         //given
-        final Operation operation = Operation.builder().id(1L).build();
+        final Operation operation = Operation.builder().id("ID").build();
         ArgumentCaptor<OperationResult> resultCaptor = ArgumentCaptor.forClass(OperationResult.class);
         doNothing().when(resultsService).save(resultCaptor.capture());
         when(computationService.compute(operation)).thenThrow(new IllegalArgumentException("message"));

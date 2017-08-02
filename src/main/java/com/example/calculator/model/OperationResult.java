@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 public class OperationResult {
 
-    private long id;
+    private String id;
 
     private BigDecimal value;
 

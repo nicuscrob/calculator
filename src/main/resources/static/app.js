@@ -41,7 +41,7 @@ function sendAdd() {
     }));
     $("#results").append("<tr><td>" + $("#left").val() + " + " + $("#right").val() +
         "<span id="+ operationId +"/>" +
-        "</td><td><button onclick=\"requestResult(\'"+ operationId+ "\')\">Request Result</button>" +
+        "</td><td><label> " + operationId + " </label><button onclick=\"requestResult(\'"+ operationId+ "\')\">Request Result</button>" +
         "</td></tr>");
 
 }
